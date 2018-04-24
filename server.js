@@ -43,6 +43,13 @@ app.get('/', (req, res) => {
     res.render('main', { title: 'Main page title' })
 })
 
+// Return all messages
+// app.get('/api/messages', (req, res) => {
+//     db.Message.findAll().then(messages => {
+//         res.json(messages)
+//     })
+// })
+
 // About page
 app.get('/about', (req, res) => {
     // Example socket.io event
