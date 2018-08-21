@@ -35,7 +35,7 @@ io.on('connection', socket => {
 })
 
 // Load database
-const db = require('./database.js')
+
 
 // Main endpoint where main page is served from
 app.get('/', (req, res) => {
@@ -63,10 +63,8 @@ app.get('/about', (req, res) => {
 
 // Synchronize database models
 // Documentation: http://docs.sequelizejs.com/
-db.sequelize.sync({ force: false }).then(() => {
     console.log('Database synchronized..')
 
     http.listen(3000, () => {
         console.log('Web server started..')
     })
-})
