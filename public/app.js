@@ -128,13 +128,13 @@ getGreenStatus = function ()  {
   let options = {
     method: 'GET',
     headers: {
+
     }
   }
 
   fetch(url, options)
     .then(response => response.json())
     .then(json => {
-      console.log(json.result.records)
       let total = json.result.records[0].TotalLoad;
       let solar = json.result.records[0].SolarPower;
       let hydro = json.result.records[0].HydroPower;
@@ -158,3 +158,8 @@ getGreenStatus = function ()  {
     })
 
 }
+var minutes = 60, the_interval = minutes * 60 * 1000;
+setInterval(function() {
+  console.log("I am doing my 1 minutes check");
+  getGreenStatus();
+}, the_interval);
