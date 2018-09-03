@@ -135,6 +135,7 @@ getGreenStatus = function ()  {
   fetch(url, options)
     .then(response => response.json())
     .then(json => {
+      console.log(json)
       let total = json.result.records[0].TotalLoad;
       let solar = json.result.records[0].SolarPower;
       let hydro = json.result.records[0].HydroPower;
