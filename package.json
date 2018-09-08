@@ -26,6 +26,8 @@
     "ejs": "^2.5.9",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "node-fetch": "^2.2.0",
+    "phantom": "^6.0.3",
     "sequelize": "^4.37.6",
     "socket.io": "^2.1.0",
     "sqlite3": "^4.0.0"

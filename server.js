@@ -1,6 +1,8 @@
 // Load Express and create app
 const express = require('express')
 const app = express()
+const fetch = require('node-fetch')
+
 
 // Load express-session and set it up
 // Documentation: https://github.com/expressjs/session
@@ -68,3 +70,115 @@ app.get('/about', (req, res) => {
     http.listen(3000, () => {
         console.log('Web server started..')
     })
+
+
+// integrate with IFTTT
+goodStatus = function () {
+  let url = `https://maker.ifttt.com/trigger/good_status/with/key/l16PR43yAszVw5C9r-tGIoAZaESSgipQ54CV2jww0Sh`;
+  let options = {
+    method: 'GET',
+    headers: {
+    }
+  }
+
+  fetch(url, options)
+    .then(response => response.json())
+    .then(json => {
+      if (response.status == 'OK') {
+     console.log("OK")
+     }
+     if (response.status == 'NOTOK') {
+       console.log("NOTOK")
+     }
+
+    })
+    .catch(err => {
+        console.log("Error catched GOODSTATUS")
+      })
+}
+mediumStatus = function () {
+  let url = `https://maker.ifttt.com/trigger/medium_status/with/key/l16PR43yAszVw5C9r-tGIoAZaESSgipQ54CV2jww0Sh`;
+  let options = {
+    method: 'GET',
+    headers: {
+    }
+  }
+
+  fetch(url, options)
+    .then(response => response.json())
+    .then(json => {
+      if (response.status == 'OK') {
+     console.log("OK")
+     }
+     if (response.status == 'NOTOK') {
+       console.log("NOTOK")
+     }
+
+    })
+    .catch(err => {
+        console.log("Error catched MEDIUM STATUS")
+      })
+}
+
+badStatus = function () {
+  let url = `https://maker.ifttt.com/trigger/bad_status/with/key/l16PR43yAszVw5C9r-tGIoAZaESSgipQ54CV2jww0Sh`;
+  let options = {
+    method: 'GET',
+    headers: {
+    }
+  }
+
+  fetch(url, options)
+    .then(response => response.json())
+    .then(json => {
+      if (response.status == 'OK') {
+     console.log("OK")
+     }
+     if (response.status == 'NOTOK') {
+       console.log("NOTOK")
+     }
+
+    })
+    .catch(err => {
+        console.log("Error catched BAD STATUS")
+      })
+}
+
+getGreenStatus = function ()  {
+  let url = `https://api.energidataservice.dk/datastore_search?resource_id=b5a8e0bc-44af-49d7-bb57-8f968f96932d&limit=1&q=DK1&sort=Minutes5DK desc`;
+  let options = {
+    method: 'GET',
+    headers: {
+    }
+  }
+
+  fetch(url, options)
+    .then(response => response.json())
+    .then(json => {
+      let co2 = json.result.records[0].CO2Emission;
+      console.log('The current co2 grams per kWh is ' + co2)
+
+
+      if (co2 > 350) {
+        badStatus();
+
+      } else if (co2 > 150 && co2 < 349)  {
+        mediumStatus();
+
+      } else {
+        goodStatus();
+
+      }
+
+    })
+    .catch(err => {
+        console.log("Error catched")
+      })
+
+}
+getGreenStatus();
+var minutes = 5, the_interval = minutes * 60 * 1000;
+setInterval(function() {
+  console.log("I am doing my 1 minutes check");
+  getGreenStatus();
+}, the_interval);
