@@ -1,4 +1,4 @@
-let username = 'QMACo62a2EOg7Y9k0cdjrofgVwPsqHOMtXmFWWMc'
+// let username = 'QMACo62a2EOg7Y9k0cdjrofgVwPsqHOMtXmFWWMc'
 
 // turnOn = function() {
 //   let url = `http://192.168.0.100/api/${username}/lights/3/state`;

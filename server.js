@@ -179,6 +179,6 @@ getGreenStatus = function ()  {
 getGreenStatus();
 var minutes = 5, the_interval = minutes * 60 * 1000;
 setInterval(function() {
-  console.log("I am doing my 1 minutes check");
+  console.log("I am doing my 5 minutes check");
   getGreenStatus();
 }, the_interval);
