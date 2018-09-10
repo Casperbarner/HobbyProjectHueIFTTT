@@ -74,11 +74,15 @@ app.get('/about', (req, res) => {
 
 // integrate with IFTTT
 goodStatus = function () {
-  let url = `https://maker.ifttt.com/trigger/good_status/with/key/l16PR43yAszVw5C9r-tGIoAZaESSgipQ54CV2jww0Sh`;
+  let url = `https://maker.ifttt.com/trigger/renewable_status/with/key/l16PR43yAszVw5C9r-tGIoAZaESSgipQ54CV2jww0Sh`;
   let options = {
-    method: 'GET',
+    method: 'POST',
     headers: {
-    }
+          "content-type": 'application/json',
+        },
+        body: JSON.stringify({
+          'value1' : 'green',
+      })
   }
 
   fetch(url, options)
@@ -93,15 +97,19 @@ goodStatus = function () {
 
     })
     .catch(err => {
-        console.log("Error catched GOODSTATUS")
+        console.log(err)
       })
 }
 mediumStatus = function () {
-  let url = `https://maker.ifttt.com/trigger/medium_status/with/key/l16PR43yAszVw5C9r-tGIoAZaESSgipQ54CV2jww0Sh`;
+  let url = `https://maker.ifttt.com/trigger/renewable_status/with/key/l16PR43yAszVw5C9r-tGIoAZaESSgipQ54CV2jww0Sh`;
   let options = {
-    method: 'GET',
+    method: 'POST',
     headers: {
-    }
+          "content-type": 'application/json',
+        },
+        body: JSON.stringify({
+          'value1': 'yellow',
+      })
   }
 
   fetch(url, options)
@@ -116,16 +124,20 @@ mediumStatus = function () {
 
     })
     .catch(err => {
-        console.log("Error catched MEDIUM STATUS")
+        console.log(err)
       })
 }
 
 badStatus = function () {
-  let url = `https://maker.ifttt.com/trigger/bad_status/with/key/l16PR43yAszVw5C9r-tGIoAZaESSgipQ54CV2jww0Sh`;
+  let url = `https://maker.ifttt.com/trigger/renewable_status/with/key/l16PR43yAszVw5C9r-tGIoAZaESSgipQ54CV2jww0Sh`;
   let options = {
-    method: 'GET',
+    method: 'POST',
     headers: {
-    }
+          "content-type": 'application/json',
+        },
+        body: JSON.stringify({
+          'value1': 'red',
+      })
   }
 
   fetch(url, options)
@@ -140,7 +152,7 @@ badStatus = function () {
 
     })
     .catch(err => {
-        console.log("Error catched BAD STATUS")
+        console.log(err)
       })
 }
 
@@ -155,6 +167,9 @@ getGreenStatus = function ()  {
   fetch(url, options)
     .then(response => response.json())
     .then(json => {
+
+
+
       let co2 = json.result.records[0].CO2Emission;
       console.log('The current co2 grams per kWh is ' + co2)
 
@@ -172,11 +187,12 @@ getGreenStatus = function ()  {
 
     })
     .catch(err => {
-        console.log("Error catched")
+        console.log(err)
       })
 
 }
 getGreenStatus();
+
 var minutes = 5, the_interval = minutes * 60 * 1000;
 setInterval(function() {
   console.log("I am doing my 5 minutes check");
