@@ -45,23 +45,6 @@ app.get('/', (req, res) => {
     res.render('main', { title: 'Main page title' })
 })
 
-// Return all messages
-// app.get('/api/messages', (req, res) => {
-//     db.Message.findAll().then(messages => {
-//         res.json(messages)
-//     })
-// })
-
-// About page
-app.get('/about', (req, res) => {
-    // Example socket.io event
-    io.emit('page view', {
-        page: 'about'
-    })
-
-    // Render the about.html in the views folder
-    res.render('about', { title: 'About page' })
-})
 
 // Synchronize database models
 // Documentation: http://docs.sequelizejs.com/
@@ -71,8 +54,39 @@ app.get('/about', (req, res) => {
         console.log('Web server started..')
     })
 
+// This function calls the energinet data service api to check amount of co2 grams per kWh in the power lines in Western Denmark.
+// Dependent on the response, one of the three IFTTT functions are called, which eventually switches a given Hue light to green, yellow or red.
+getGreenStatus = function ()  {
+  let url = `https://api.energidataservice.dk/datastore_search?resource_id=b5a8e0bc-44af-49d7-bb57-8f968f96932d&limit=1&q=DK1&sort=Minutes5DK desc`;
+  let options = {
+    method: 'GET',
+    headers: {
+    }
+  }
+
+  fetch(url, options)
+    .then(response => response.json())
+    .then(json => {
+      let co2 = json.result.records[0].CO2Emission;
+      console.log('The current co2 grams per kWh is ' + co2)
+      if (co2 > 350) {
+        badStatus();
+      } else if (co2 > 150 && co2 < 349)  {
+        mediumStatus();
+      } else {
+        goodStatus();
+      }
+
+    })
+    .catch(err => {
+        console.log(err)
+      })
+
+}
 
 // integrate with IFTTT
+
+// Changes Hue lights to green
 goodStatus = function () {
   let url = `https://maker.ifttt.com/trigger/renewable_status/with/key/l16PR43yAszVw5C9r-tGIoAZaESSgipQ54CV2jww0Sh`;
   let options = {
@@ -100,6 +114,8 @@ goodStatus = function () {
         console.log(err)
       })
 }
+
+// Changes hue lights to yellow
 mediumStatus = function () {
   let url = `https://maker.ifttt.com/trigger/renewable_status/with/key/l16PR43yAszVw5C9r-tGIoAZaESSgipQ54CV2jww0Sh`;
   let options = {
@@ -128,6 +144,7 @@ mediumStatus = function () {
       })
 }
 
+// Changes hue lights to red
 badStatus = function () {
   let url = `https://maker.ifttt.com/trigger/renewable_status/with/key/l16PR43yAszVw5C9r-tGIoAZaESSgipQ54CV2jww0Sh`;
   let options = {
@@ -156,43 +173,11 @@ badStatus = function () {
       })
 }
 
-getGreenStatus = function ()  {
-  let url = `https://api.energidataservice.dk/datastore_search?resource_id=b5a8e0bc-44af-49d7-bb57-8f968f96932d&limit=1&q=DK1&sort=Minutes5DK desc`;
-  let options = {
-    method: 'GET',
-    headers: {
-    }
-  }
-
-  fetch(url, options)
-    .then(response => response.json())
-    .then(json => {
-
-
-
-      let co2 = json.result.records[0].CO2Emission;
-      console.log('The current co2 grams per kWh is ' + co2)
-
-
-      if (co2 > 350) {
-        badStatus();
-
-      } else if (co2 > 150 && co2 < 349)  {
-        mediumStatus();
-
-      } else {
-        goodStatus();
-
-      }
-
-    })
-    .catch(err => {
-        console.log(err)
-      })
-
-}
+// Initiating the getGreenStatus function in launching the application
 getGreenStatus();
 
+// This code calls the getGreenStatus(); function every 5 minutes, resulting in updating the color of the lights. Continously runs 
+// to keep the user up-to-date about green energy in the power lines
 var minutes = 5, the_interval = minutes * 60 * 1000;
 setInterval(function() {
   console.log("I am doing my 5 minutes check");
