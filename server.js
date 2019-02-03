@@ -29,15 +29,6 @@ app.use(express.static('public'))
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
 
-// Real time events
-io.on('connection', socket => {
-    console.log('Socket connected', socket.id)
-
-    socket.emit('debug message', 'Socket connected to server!')
-})
-
-// Load database
-
 
 // Main endpoint where main page is served from
 app.get('/', (req, res) => {
