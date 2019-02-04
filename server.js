@@ -29,18 +29,6 @@ app.use(express.static('public'))
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
 
-
-// Main endpoint where main page is served from
-app.get('/', (req, res) => {
-    // Render the main.html in the views folder
-    res.render('main', { title: 'Main page title' })
-})
-
-
-// Synchronize database models
-// Documentation: http://docs.sequelizejs.com/
-    console.log('Database synchronized..')
-
     http.listen(3000, () => {
         console.log('Web server started..')
     })
@@ -59,7 +47,6 @@ getGreenStatus = function ()  {
     .then(response => response.json())
     .then(json => {
       let co2 = json.result.records[0].CO2Emission;
-      console.log('The current co2 grams per kWh is ' + co2)
       if (co2 > 350) {
         badStatus();
       } else if (co2 > 150 && co2 < 349)  {
@@ -171,6 +158,5 @@ getGreenStatus();
 // to keep the user up-to-date about green energy in the power lines
 var minutes = 5, the_interval = minutes * 60 * 1000;
 setInterval(function() {
-  console.log("I am doing my 5 minutes check");
   getGreenStatus();
 }, the_interval);
